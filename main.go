@@ -13,6 +13,11 @@ import (
 	"golang.org/x/oauth2/clientcredentials"
 )
 
+type MyArr struct {
+	Song  string
+	value float32
+}
+
 func main() {
 	ctx := context.Background()
 	godotenv.Load()
@@ -29,7 +34,7 @@ func main() {
 	httpClient := spotifyauth.New().Client(ctx, token)
 	client := spotify.New(httpClient)
 	//major  code
-	results, err := client.Search(ctx, "paramore", spotify.SearchTypeAlbum)
+	results, err := client.Search(ctx, "sempiternal", spotify.SearchTypeAlbum)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +44,7 @@ func main() {
 		fmt.Println("Albums:")
 		item := results.Albums.Albums[0]
 		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
-		arr := make([]float32, res.Total+1)
+		arr := make([]MyArr, res.Total+1)
 		var i int = 0
 
 		if err != nil {
@@ -50,17 +55,17 @@ func main() {
 			if err != nil {
 				fmt.Println("error getting audio features...", err.Error())
 			}
-			arr[i] = x[0].Valence
-			fmt.Println(arr[i])
+			arr[i].Song = item.Name
+			arr[i].value = x[0].Valence
+			//fmt.Println(arr[i])
 			i++
-			fmt.Println(item.Name)
 		}
 
 		sort.Slice(arr, func(i, j int) bool {
-			return arr[i] < arr[j]
+			return arr[i].value < arr[j].value
 		})
 		for i := 0; i < res.Total; i++ {
-			fmt.Println(arr[i])
+			fmt.Println(arr[i].Song)
 		}
 		/*	for _, item := range results.Albums.Albums {
 			fmt.Println("   ", item.Name)
