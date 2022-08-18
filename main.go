@@ -27,13 +27,24 @@ func main() {
 
 	httpClient := spotifyauth.New().Client(ctx, token)
 	client := spotify.New(httpClient)
-	msg, page, err := client.FeaturedPlaylists(ctx)
+	//major  code
+	results, err := client.Search(ctx, "paramore", spotify.SearchTypeArtist|spotify.SearchTypeAlbum)
 	if err != nil {
-		log.Fatalf("couldn't get features playlists: %v", err)
+		log.Fatal(err)
 	}
 
-	fmt.Println(msg)
-	for _, playlist := range page.Playlists {
-		fmt.Println("  ", playlist.Name)
+	// handle album results
+	if results.Albums != nil {
+		fmt.Println("Albums:")
+		for _, item := range results.Albums.Albums {
+			fmt.Println("   ", item.Name)
+		}
+	}
+	// handle playlist results
+	if results.Artists != nil {
+		fmt.Println("artists:")
+		for _, item := range results.Artists.Artists {
+			fmt.Println("   ", item.Name)
+		}
 	}
 }
