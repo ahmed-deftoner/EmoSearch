@@ -38,7 +38,7 @@ func main() {
 		fmt.Println("Albums:")
 		item := results.Albums.Albums[0]
 		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
-		var arr = make([]float64, res.Total+1)
+		arr := make([]float32, res.Total+1)
 		var i int = 0
 
 		if err != nil {
@@ -49,9 +49,9 @@ func main() {
 			if err != nil {
 				fmt.Println("error getting audio features...", err.Error())
 			}
-			arr[i] = float64(x[0].Valence)
-			i++
+			arr[i] = x[0].Valence
 			fmt.Println(arr[i])
+			i++
 			fmt.Println(item.Name)
 		}
 
