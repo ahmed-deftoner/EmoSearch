@@ -28,7 +28,7 @@ func main() {
 	httpClient := spotifyauth.New().Client(ctx, token)
 	client := spotify.New(httpClient)
 	//major  code
-	results, err := client.Search(ctx, "paramore", spotify.SearchTypeArtist|spotify.SearchTypeAlbum)
+	results, err := client.Search(ctx, "paramore", spotify.SearchTypeAlbum)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -36,15 +36,19 @@ func main() {
 	// handle album results
 	if results.Albums != nil {
 		fmt.Println("Albums:")
-		for _, item := range results.Albums.Albums {
-			fmt.Println("   ", item.Name)
+		item := results.Albums.Albums[0]
+		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
+
+		if err != nil {
+			fmt.Println("error getting tracks ....", err.Error())
 		}
-	}
-	// handle playlist results
-	if results.Artists != nil {
-		fmt.Println("artists:")
-		for _, item := range results.Artists.Artists {
-			fmt.Println("   ", item.Name)
+		for _, item := range res.Tracks {
+			fmt.Println(item.Name)
 		}
+
+		fmt.Println(item.ID.String())
+		/*	for _, item := range results.Albums.Albums {
+			fmt.Println("   ", item.Name)
+		}*/
 	}
 }
