@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"sort"
 
 	"github.com/joho/godotenv"
 	"github.com/zmb3/spotify/v2"
@@ -55,7 +56,12 @@ func main() {
 			fmt.Println(item.Name)
 		}
 
-		fmt.Println(item.ID.String())
+		sort.Slice(arr, func(i, j int) bool {
+			return arr[i] < arr[j]
+		})
+		for i := 0; i < res.Total; i++ {
+			fmt.Println(arr[i])
+		}
 		/*	for _, item := range results.Albums.Albums {
 			fmt.Println("   ", item.Name)
 		}*/
