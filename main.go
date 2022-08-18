@@ -34,7 +34,7 @@ func main() {
 	httpClient := spotifyauth.New().Client(ctx, token)
 	client := spotify.New(httpClient)
 	//major  code
-	results, err := client.Search(ctx, "sempiternal", spotify.SearchTypeAlbum)
+	results, err := client.Search(ctx, "brand new eyes", spotify.SearchTypeAlbum)
 	if err != nil {
 		log.Fatal(err)
 	}
