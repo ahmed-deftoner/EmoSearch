@@ -13,7 +13,7 @@ type MyArr struct {
 	value float32
 }
 
-func GetSadSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) {
+func GetSadSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) []string {
 	if results.Albums != nil {
 		fmt.Println("Albums:")
 		item := results.Albums.Albums[0]
@@ -38,11 +38,16 @@ func GetSadSongs(ctx context.Context, results *spotify.SearchResult, client *spo
 		sort.Slice(arr, func(i, j int) bool {
 			return arr[i].value < arr[j].value
 		})
+		songArr := make([]string, res.Total+1)
+
 		for i := 0; i < res.Total; i++ {
 			fmt.Println(arr[i].Song)
+			songArr[i] = arr[i].Song
 		}
 		/*	for _, item := range results.Albums.Albums {
 			fmt.Println("   ", item.Name)
 		}*/
+		return songArr
 	}
+	return nil
 }
