@@ -2,8 +2,6 @@ package parser
 
 import (
 	"context"
-	"flag"
-	"fmt"
 	"log"
 	"os"
 
@@ -35,7 +33,7 @@ func HandleRequest(message string) []string {
 	ctx := context.Background()
 	client := getClient(ctx)
 
-	//flags
+	/*flags
 	albumPtr := flag.Bool("album", true, "search for album")
 	playlistPtr := flag.Bool("playlist", false, "search for playlist")
 
@@ -51,19 +49,19 @@ func HandleRequest(message string) []string {
 	fmt.Println("tail:", flag.Args())
 
 	//major  code
-	if *albumPtr {
-		results, err := client.Search(ctx, message, spotify.SearchTypeAlbum)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return audiofeature.GetSongs(ctx, results, client)
+	if *albumPtr {*/
+	results, err := client.Search(ctx, message, spotify.SearchTypeAlbum)
+	if err != nil {
+		log.Fatal(err)
 	}
-	if *playlistPtr {
-		results, err := client.Search(ctx, "youth", spotify.SearchTypePlaylist)
-		if err != nil {
-			log.Fatal(err)
-		}
-		return audiofeature.GetSongs(ctx, results, client)
-	}
+	return audiofeature.GetSongs(ctx, results, client)
+	/*
+		if *playlistPtr {
+			results, err := client.Search(ctx, "youth", spotify.SearchTypePlaylist)
+			if err != nil {
+				log.Fatal(err)
+			}
+			return audiofeature.GetSongs(ctx, results, client)
+		}*/
 	return nil
 }
