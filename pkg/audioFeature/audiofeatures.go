@@ -18,11 +18,11 @@ type Features struct {
 	acoustic     float32
 }
 
-func GetSongs() {
+func GetSadSongs() {
 
 }
 
-func GetSadSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) []string {
+func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) []string {
 	if results.Albums != nil {
 		item := results.Albums.Albums[0]
 		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
@@ -39,6 +39,12 @@ func GetSadSongs(ctx context.Context, results *spotify.SearchResult, client *spo
 			}
 			arr[i].Song = item.Name
 			arr[i].valence = x[0].Valence
+			arr[i].acoustic = x[0].Acousticness
+			arr[i].danceable = x[0].Danceability
+			arr[i].intense = x[0].Energy
+			arr[i].instrumental = x[0].Instrumentalness
+			arr[i].vocal = x[0].Speechiness
+
 			//fmt.Println(arr[i])
 			i++
 		}
