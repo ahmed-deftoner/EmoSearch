@@ -18,6 +18,23 @@ type MyArr struct {
 	value float32
 }
 
+func Initialize() *spotify.Client {
+	ctx := context.Background()
+	godotenv.Load()
+	config := &clientcredentials.Config{
+		ClientID:     os.Getenv("SPOTIFY_ID"),
+		ClientSecret: os.Getenv("SPOTIFY_SECRET"),
+		TokenURL:     spotifyauth.TokenURL,
+	}
+	token, err := config.Token(ctx)
+	if err != nil {
+		log.Fatalf("couldn't get token: %v", err)
+	}
+
+	httpClient := spotifyauth.New().Client(ctx, token)
+	return spotify.New(httpClient)
+}
+
 func main() {
 	ctx := context.Background()
 	godotenv.Load()
