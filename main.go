@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -35,8 +36,26 @@ func getClient(ctx context.Context) *spotify.Client {
 }
 
 func main() {
+
+	//init
 	ctx := context.Background()
 	client := getClient(ctx)
+
+	//flags
+	albumPtr := flag.Bool("album", false, "search for album")
+	playlistPtr := flag.Bool("playlist", false, "search for playlist")
+
+	numbPtr := flag.Int("num", 1, "number of songs")
+	forkPtr := flag.String("emo", "sad", "get emotion")
+
+	flag.Parse()
+
+	fmt.Println("numb:", *albumPtr)
+	fmt.Println("numb:", *playlistPtr)
+	fmt.Println("numb:", *numbPtr)
+	fmt.Println("fork:", *forkPtr)
+	fmt.Println("tail:", flag.Args())
+
 	//major  code
 	results, err := client.Search(ctx, "youth", spotify.SearchTypeAlbum)
 	if err != nil {
