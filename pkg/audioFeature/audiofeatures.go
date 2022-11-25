@@ -48,6 +48,12 @@ func GetInstrumentalSongs(arr []Features) {
 	})
 }
 
+func GetVocalSongs(arr []Features) {
+	sort.Slice(arr, func(i, j int) bool {
+		return arr[i].vocal > arr[j].vocal
+	})
+}
+
 func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) []string {
 	if results.Albums != nil {
 		item := results.Albums.Albums[0]
