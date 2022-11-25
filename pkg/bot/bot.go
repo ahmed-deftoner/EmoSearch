@@ -21,7 +21,7 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	if m.Content != "" {
 		_, _ = s.ChannelMessageSend(m.ChannelID, msgs[rand.Intn(5)])
-		arr := parser.HandleRequest()
+		arr := parser.HandleRequest(m.Content)
 		if arr == nil {
 			_, _ = s.ChannelMessageSend(m.ChannelID, "empty arr")
 			return

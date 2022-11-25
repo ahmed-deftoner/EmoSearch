@@ -30,7 +30,7 @@ func getClient(ctx context.Context) *spotify.Client {
 	return spotify.New(httpClient)
 }
 
-func HandleRequest() []string {
+func HandleRequest(message string) []string {
 	//init
 	ctx := context.Background()
 	client := getClient(ctx)
@@ -52,7 +52,7 @@ func HandleRequest() []string {
 
 	//major  code
 	if *albumPtr {
-		results, err := client.Search(ctx, "youth", spotify.SearchTypeAlbum)
+		results, err := client.Search(ctx, message, spotify.SearchTypeAlbum)
 		if err != nil {
 			log.Fatal(err)
 		}
