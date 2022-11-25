@@ -79,6 +79,7 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 			i++
 		}
 
+		GetSadSongs()
 		songArr := make([]string, res.Total+1)
 
 		for i := 0; i < res.Total; i++ {
