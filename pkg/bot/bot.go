@@ -15,13 +15,11 @@ var goBot *discordgo.Session
 var msgs = []string{"uwu", "oni chan", "fuck me, baby", "cum inside me", "ara ara"}
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	fmt.Print("jaja")
 	if m.Author.ID == BotID {
 		return
 	}
 
-	fmt.Print(m.Content)
-	if m.Content == "" {
+	if m.Content != "" {
 		_, _ = s.ChannelMessageSend(m.ChannelID, msgs[rand.Intn(5)])
 		arr := parser.HandleRequest()
 		if arr == nil {
@@ -31,7 +29,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		for i := 0; i < len(arr); i++ {
 			_, _ = s.ChannelMessageSend(m.ChannelID, arr[i])
 		}
-		fmt.Print("hobo")
 	}
 }
 
