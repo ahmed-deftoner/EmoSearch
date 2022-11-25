@@ -56,14 +56,14 @@ func HandleRequest(message string) []string {
 		if err != nil {
 			log.Fatal(err)
 		}
-		return audiofeature.GetSadSongs(ctx, results, client)
+		return audiofeature.GetSongs(ctx, results, client)
 	}
 	if *playlistPtr {
 		results, err := client.Search(ctx, "youth", spotify.SearchTypePlaylist)
 		if err != nil {
 			log.Fatal(err)
 		}
-		return audiofeature.GetSadSongs(ctx, results, client)
+		return audiofeature.GetSongs(ctx, results, client)
 	}
 	return nil
 }
