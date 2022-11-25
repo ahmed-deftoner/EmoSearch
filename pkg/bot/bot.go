@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/ahmed-deftoner/discord-bot/pkg/config"
+	"github.com/ahmed-deftoner/spotifytest/pkg/config"
 	"github.com/bwmarrin/discordgo"
 )
 
