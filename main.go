@@ -18,8 +18,7 @@ type MyArr struct {
 	value float32
 }
 
-func Initialize() *spotify.Client {
-	ctx := context.Background()
+func getClient(ctx context.Context) *spotify.Client {
 	godotenv.Load()
 	config := &clientcredentials.Config{
 		ClientID:     os.Getenv("SPOTIFY_ID"),
@@ -37,19 +36,7 @@ func Initialize() *spotify.Client {
 
 func main() {
 	ctx := context.Background()
-	godotenv.Load()
-	config := &clientcredentials.Config{
-		ClientID:     os.Getenv("SPOTIFY_ID"),
-		ClientSecret: os.Getenv("SPOTIFY_SECRET"),
-		TokenURL:     spotifyauth.TokenURL,
-	}
-	token, err := config.Token(ctx)
-	if err != nil {
-		log.Fatalf("couldn't get token: %v", err)
-	}
-
-	httpClient := spotifyauth.New().Client(ctx, token)
-	client := spotify.New(httpClient)
+	client := getClient(ctx)
 	//major  code
 	results, err := client.Search(ctx, "youth", spotify.SearchTypeAlbum)
 	if err != nil {
