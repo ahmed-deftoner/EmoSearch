@@ -18,8 +18,10 @@ type Features struct {
 	acoustic     float32
 }
 
-func GetSadSongs() {
-
+func GetSadSongs(arr []Features) {
+	sort.Slice(arr, func(i, j int) bool {
+		return arr[i].valence < arr[j].valence
+	})
 }
 
 func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) []string {
@@ -44,14 +46,9 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 			arr[i].intense = x[0].Energy
 			arr[i].instrumental = x[0].Instrumentalness
 			arr[i].vocal = x[0].Speechiness
-
-			//fmt.Println(arr[i])
 			i++
 		}
 
-		sort.Slice(arr, func(i, j int) bool {
-			return arr[i].valence < arr[j].valence
-		})
 		songArr := make([]string, res.Total+1)
 
 		for i := 0; i < res.Total; i++ {
