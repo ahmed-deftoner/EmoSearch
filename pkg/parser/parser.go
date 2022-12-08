@@ -2,10 +2,10 @@ package parser
 
 import (
 	"context"
-	"fmt"
-	"fmt"
-	"log
-	"os"conv"
+
+	"log"
+	"os"
+	"strconv"
 	"strings"
 
 	"github.com/joho/godotenv"
@@ -14,6 +14,7 @@ import (
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2/clientcredentials"
 )
+
 
 func getClient(ctx context.Context) *spotify.Client {
 	godotenv.Load()
@@ -31,12 +32,18 @@ func getClient(ctx context.Context) *spotify.Client {
 	return spotify.New(httpClient)
 }
 
+
 func HandleRequest(message string) []string {
 	//init
 	ctx := context.Background()
 	client := getClient(ctx)
 
 	tokens := strings.Split(message, "-")
+	arr := make([]string, 1)
+	arr[0] = "incorrect input format. Type 'help' to see options"
+	if len(tokens) != 4 {
+		return arr
+	}
 	num, err := strconv.Atoi(tokens[3])
 	if err != nil {
 		log.Fatal(err)
@@ -46,14 +53,14 @@ func HandleRequest(message string) []string {
 		if err != nil {
 			log.Fatal(err)
 		}
-		return audiofeature.GetSongs(ctx, results, client, tokens[2], num)
+		return audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
 	} else if tokens[1] == "p" {
-		results, err := client.earch(ctx, tokens[0], spotify.SearchTypePlaylist)
+		results, err := client.Search(ctx, tokens[0], spotify.SearchTypePlaylist)
 		
-f err != nil {  
+		if err != nil {  
 			log.Fatal(err)
 		}
-		rturn audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
+		return audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
 	}
-	rturn nil
+	return nil
 }

@@ -17,9 +17,13 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if m.Content != "" {
+		if m.Content == "help" {
+			_, _ = s.ChannelMessageSend(m.ChannelID, "input formar: <album/playlist name>-<type>-<emotion>-<number of songs>\n e.g Sempiternal-a-sad-5 (5 saddest songs from album with the name sempiternal)\nOptions\n type = a (album) | p (playlist)\nemotion = sad | happy | instrumental | vocal | acoustic | intense | dance")
+			return
+		}
 		arr := parser.HandleRequest(m.Content)
 		if arr == nil {
-			_, _ = s.ChannelMessageSend(m.ChannelID, "empty arr")
+			_, _ = s.ChannelMessageSend(m.ChannelID, "album/playlist not found")
 			return
 		}
 		for i := 0; i < len(arr); i++ {

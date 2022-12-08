@@ -30,6 +30,12 @@ func GetHappySongs(arr []Features) {
 	})
 }
 
+func GetDancySongs(arr []Features) {
+	sort.Slice(arr, func(i, j int) bool {
+		return arr[i].danceable > arr[j].danceable
+	})
+}
+
 func GetIntenseSongs(arr []Features) {
 	sort.Slice(arr, func(i, j int) bool {
 		return arr[i].intense > arr[j].intense
@@ -92,6 +98,8 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 			GetIntenseSongs(arr)
 		case "vocal":
 			GetVocalSongs(arr)
+		case "dance":
+			GetDancySongs(arr)
 		default:
 			GetSadSongs(arr)
 		}
@@ -142,6 +150,8 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 			GetIntenseSongs(arr)
 		case "vocal":
 			GetVocalSongs(arr)
+		case "dance":
+			GetDancySongs(arr)
 		default:
 			GetSadSongs(arr)
 		}
