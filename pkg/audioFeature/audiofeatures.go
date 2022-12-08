@@ -101,10 +101,7 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 		for i := 0; i < res.Total; i++ {
 			songArr[i] = arr[i].Song
 		}
-		/*	for _, item := range results.Albums.Albums {
-			fmt.Println("   ", item.Name)
-		}*/
-		return songArr
+		return songArr[:num]
 	}
 	return nil
 }
