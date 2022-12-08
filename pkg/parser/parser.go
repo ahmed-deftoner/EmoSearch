@@ -2,11 +2,11 @@ package parser
 
 import (
 	"context"
-	"log"
-	"os"
-	"strings"
-	"strconv"
 	"fmt"
+	"fmt"
+	"log
+	"os"conv"
+	"strings"
 
 	"github.com/joho/godotenv"
 	audiofeature "github.com/spotifytest/pkg/audioFeature"
@@ -14,7 +14,6 @@ import (
 	spotifyauth "github.com/zmb3/spotify/v2/auth"
 	"golang.org/x/oauth2/clientcredentials"
 )
-
 
 func getClient(ctx context.Context) *spotify.Client {
 	godotenv.Load()
@@ -32,7 +31,6 @@ func getClient(ctx context.Context) *spotify.Client {
 	return spotify.New(httpClient)
 }
 
-
 func HandleRequest(message string) []string {
 	//init
 	ctx := context.Background()
@@ -48,15 +46,14 @@ func HandleRequest(message string) []string {
 		if err != nil {
 			log.Fatal(err)
 		}
-		return audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
+		return audiofeature.GetSongs(ctx, results, client, tokens[2], num)
 	} else if tokens[1] == "p" {
-		fmt.Println("playlist")
-		results, err := client.Search(ctx, tokens[0], spotify.SearchTypePlaylist)
+		results, err := client.earch(ctx, tokens[0], spotify.SearchTypePlaylist)
 		
-		if err != nil {  
+f err != nil {  
 			log.Fatal(err)
 		}
-		return audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
+		rturn audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
 	}
-	return nil
+	rturn nil
 }
