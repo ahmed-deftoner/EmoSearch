@@ -6,14 +6,17 @@ import (
 	"os"
 	"strings"
 	"strconv"
+	"fmt"
 
 	"github.com/joho/godotenv"
-	audiofeature "github.com/spoifytest/pkg/audioFeature"
+	audiofeature "github.com/spotifytest/pkg/audioFeature"
 	"github.com/zmb3/spotify/v2"
-	spotifyauth "github.com/zmb3/spotify/v2auth"
-	golang.org/x/oauth2/clientcredentials"
+	spotifyauth "github.com/zmb3/spotify/v2/auth"
+	"golang.org/x/oauth2/clientcredentials"
+)
 
 
+func getClient(ctx context.Context) *spotify.Client {
 	godotenv.Load()
 	config := &clientcredentials.Config{
 		ClientID:     os.Getenv("SPOTIFY_ID"),
@@ -29,25 +32,31 @@ import (
 	return spotify.New(httpClient)
 }
 
+
 func HandleRequest(message string) []string {
 	//init
 	ctx := context.Background()
 	client := getClient(ctx)
 
-	tokens := strings.Split(message, ":")
+	tokens := strings.Split(message, "-")
+	num, err := strconv.Atoi(tokens[3])
+	if err != nil {
+		log.Fatal(err)
+	}
 	if tokens[1] == "a" {
 		results, err := client.Search(ctx, tokens[0], spotify.SearchTypeAlbum)
-		results, err :=client.Search(ctx, tokens[0], spotify.SearchTypeAlbum)
 		if err != nil {
-			og.Fatal(err)
+			log.Fatal(err)
 		}
-		return audiofeature.GetSong(ctx, results, client,  tokens[2], strconv.Aoi(tokens[3]))
+		return audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
 	} else if tokens[1] == "p" {
-		results, err :=client.Search(ctx, tokens[0], spotify.SearchTypePlaylist)
-		if err != nil {
-			og.Fatal(err)
+		fmt.Println("playlist")
+		results, err := client.Search(ctx, tokens[0], spotify.SearchTypePlaylist)
+		
+		if err != nil {  
+			log.Fatal(err)
 		}
-		return audiofeature.GetSongs(ctx, results, client,  tokens[2], strconv.Aoi(tokens[3]))
+		return audiofeature.GetSongs(ctx, results, client,  tokens[2], num)
 	}
-	eturn nil
+	return nil
 }

@@ -54,8 +54,9 @@ func GetVocalSongs(arr []Features) {
 	})
 }
 
-func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client, emo string, num int32) []string {
+func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client, emo string, num int) []string {
 	if results.Albums != nil {
+		fmt.Println("in audio func")
 		item := results.Albums.Albums[0]
 		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
 		arr := make([]Features, res.Total+1)
@@ -100,6 +101,56 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 
 		for i := 0; i < res.Total; i++ {
 			songArr[i] = arr[i].Song
+			fmt.Println(songArr[i])
+		}
+		return songArr[:num]
+	} else if results.Playlists != nil {
+		fmt.Println("in audio func")
+		item := results.Playlists.Playlists[0]
+		res, err := client.GetPlaylistTracks(ctx, item.ID, spotify.Market("US"))
+		arr := make([]Features, res.Total+1)
+		var i int = 0
+
+		if err != nil {
+			fmt.Println("error getting tracks ....", err.Error())
+		}
+		for _, item := range res.Tracks {
+			x, err := client.GetAudioFeatures(ctx, item.ID)
+			if err != nil {
+				fmt.Println("error getting audio features...", err.Error())
+			}
+			arr[i].Song = item.Name
+			arr[i].valence = x[0].Valence
+			arr[i].acoustic = x[0].Acousticness
+			arr[i].danceable = x[0].Danceability
+			arr[i].intense = x[0].Energy
+			arr[i].instrumental = x[0].Instrumentalness
+			arr[i].vocal = x[0].Speechiness
+			i++
+		}
+
+		switch emo {
+		case "sad":
+			GetSadSongs(arr)
+		case "happy":
+			GetHappySongs(arr)
+		case "acoustic":
+			GetAcousticSongs(arr)
+		case "instrumental":
+			GetInstrumentalSongs(arr)
+		case "intense":
+			GetIntenseSongs(arr)
+		case "vocal":
+			GetVocalSongs(arr)
+		default:
+			GetSadSongs(arr)
+		}
+
+		songArr := make([]string, res.Total+1)
+
+		for i := 0; i < res.Total; i++ {
+			songArr[i] = arr[i].Song
+			fmt.Println(songArr[i])
 		}
 		return songArr[:num]
 	}
