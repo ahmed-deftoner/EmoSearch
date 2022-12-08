@@ -64,6 +64,9 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 	if results.Albums != nil {
 		item := results.Albums.Albums[0]
 		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
+		if res.Total < num || num < 1 {
+			num = res.Total
+		}
 		arr := make([]Features, res.Total+1)
 		var i int = 0
 
