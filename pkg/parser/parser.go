@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/joho/godotenv"
 	audiofeature "github.com/spotifytest/pkg/audioFeature"
@@ -33,35 +34,19 @@ func HandleRequest(message string) []string {
 	ctx := context.Background()
 	client := getClient(ctx)
 
-	/*flags
-	albumPtr := flag.Bool("album", true, "search for album")
-	playlistPtr := flag.Bool("playlist", false, "search for playlist")
-
-	numbPtr := flag.Int("num", 1, "number of songs")
-	forkPtr := flag.String("emo", "sad", "get emotion")
-
-	flag.Parse()
-
-	fmt.Println("numb:", *albumPtr)
-	fmt.Println("numb:", *playlistPtr)
-	fmt.Println("numb:", *numbPtr)
-	fmt.Println("fork:", *forkPtr)
-	fmt.Println("tail:", flag.Args())
-
-	//major  code
-	if *albumPtr {*/
-	results, err := client.Search(ctx, message, spotify.SearchTypeAlbum)
-	if err != nil {
-		log.Fatal(err)
+	tokens := strings.Split(message, ":")
+	if tokens[1] == "a" {
+		results, err := client.Search(ctx, tokens[0], spotify.SearchTypeAlbum)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return audiofeature.GetSongs(ctx, results, client)
+	} else if tokens[1] == "p" 
+		results, err := client.Search(ctx, tokens[0], spotify.SearchTypePlaylist)
+		if err != nil {
+			log.Fatal(err)
+		}
+		return audiofeature.GetSongs(ctx, results, client)
 	}
-	return audiofeature.GetSongs(ctx, results, client)
-	/*
-		if *playlistPtr {
-			results, err := client.Search(ctx, "youth", spotify.SearchTypePlaylist)
-			if err != nil {
-				log.Fatal(err)
-			}
-			return audiofeature.GetSongs(ctx, results, client)
-		}*/
 	return nil
 }

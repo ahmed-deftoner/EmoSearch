@@ -3,8 +3,6 @@ package bot
 import (
 	"fmt"
 
-	"math/rand"
-
 	"github.com/bwmarrin/discordgo"
 	"github.com/spotifytest/pkg/config"
 	"github.com/spotifytest/pkg/parser"
@@ -12,7 +10,6 @@ import (
 
 var BotID string
 var goBot *discordgo.Session
-var msgs = []string{"uwu", "oni chan", "fuck me, baby", "cum inside me", "ara ara"}
 
 func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if m.Author.ID == BotID {
@@ -20,7 +17,6 @@ func messageHandler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if m.Content != "" {
-		_, _ = s.ChannelMessageSend(m.ChannelID, msgs[rand.Intn(5)])
 		arr := parser.HandleRequest(m.Content)
 		if arr == nil {
 			_, _ = s.ChannelMessageSend(m.ChannelID, "empty arr")
