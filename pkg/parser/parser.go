@@ -41,7 +41,7 @@ func HandleRequest(message string) []string {
 			log.Fatal(err)
 		}
 		return audiofeature.GetSongs(ctx, results, client)
-	} else if tokens[1] == "p" 
+	} else if tokens[1] == "p" {
 		results, err := client.Search(ctx, tokens[0], spotify.SearchTypePlaylist)
 		if err != nil {
 			log.Fatal(err)

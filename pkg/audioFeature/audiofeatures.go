@@ -54,7 +54,7 @@ func GetVocalSongs(arr []Features) {
 	})
 }
 
-func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client) []string {
+func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotify.Client, emo string, num int32) []string {
 	if results.Albums != nil {
 		item := results.Albums.Albums[0]
 		res, err := client.GetAlbumTracks(ctx, item.ID, spotify.Market("US"))
@@ -79,7 +79,23 @@ func GetSongs(ctx context.Context, results *spotify.SearchResult, client *spotif
 			i++
 		}
 
-		GetSadSongs(arr)
+		switch emo {
+		case "sad":
+			GetSadSongs(arr)
+		case "happy":
+			GetHappySongs(arr)
+		case "acoustic":
+			GetAcousticSongs(arr)
+		case "instrumental":
+			GetInstrumentalSongs(arr)
+		case "intense":
+			GetIntenseSongs(arr)
+		case "vocal":
+			GetVocalSongs(arr)
+		default:
+			GetSadSongs(arr)
+		}
+
 		songArr := make([]string, res.Total+1)
 
 		for i := 0; i < res.Total; i++ {
